@@ -1,6 +1,7 @@
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #23dff0;
+  --foreground: #071fbd;
+  --error_font_color: red;
 }
 
 @theme inline {
@@ -24,5 +25,5 @@ body {
 }
 
 .error {
-  color: red;
+  color: var(--error_font_color);
 }

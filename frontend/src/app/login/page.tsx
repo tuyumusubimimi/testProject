@@ -17,8 +17,18 @@ export default function Login(){
     } = useForm<LoginFormData>();
 
     // ログインボタンを押すとここが実行される
-    const onSubmit = (data: LoginFormData) => {
-        console.log(data.id);
+    const onSubmit = async(data: LoginFormData) => {
+        const response = await fetch("http://localhost:8000/api/login.php", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+    });
+
+    const result = await response.json();
+
+    console.log(result);
     };
 
 
