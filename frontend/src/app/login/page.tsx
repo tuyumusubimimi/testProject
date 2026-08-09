@@ -2,7 +2,8 @@
 import { useForm } from 'react-hook-form';
 import '../globals.css';
 import { useRouter } from "next/navigation";
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { checkSession } from '../common';
 
 // ログインフォームから送るデータのデータ型を定義
 type LoginFormData = {
@@ -11,6 +12,8 @@ type LoginFormData = {
 }
 
 export default function Login(){
+    const [checkingSession, setCheckingSession] = useState(true);
+
     const router = useRouter();
 
     // react hook formの機能と実行タイミングを定義
@@ -21,40 +24,24 @@ export default function Login(){
     } = useForm<LoginFormData>();
 
     useEffect(() => {
-        const checkSession = async () => {
-            // console.log("SESSIONチェック開始");
+        const check = async () => {
+            const loggedIn = await checkSession();
 
-            try {
-                const response = await fetch(
-                    "http://localhost:8000/api/check-session.php",
-                    {
-                        credentials: "include",
-                    }
-                );
-
-                // console.log("fetch完了");
-                // console.log("status:", response.status);
-
-                const text = await response.text();
-
-                // console.log("PHP response:", text);
-
-                const result = JSON.parse(text);
-
-                // console.log("result:", result);
-
-                if (result.loggedIn) {
-                    // console.log("ログイン済み → TOPへ");
-                    router.push("/");
-                }
-
-            } catch (error) {
-                console.error("Session check error:", error);
+            if (loggedIn) {
+                router.replace("/");
+                return;
             }
+
+            setCheckingSession(false);
         };
-        checkSession();
+
+        check();
     }, [router]);
 
+    // SESSION確認中はloginを表示しない
+    if (checkingSession) {
+        return null;
+    }
 
     // ログインボタンを押すとここが実行される
     const onSubmit = async(data: LoginFormData) => {
@@ -75,7 +62,6 @@ export default function Login(){
             router.push("/");
         }
     };
-
 
     return(
         <div>

@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import './globals.css';
 import { useRouter } from "next/navigation";
+import { checkSession } from './common';
 
 export default function Home() {
   const [checkingSession, setCheckingSession] = useState(true);
@@ -31,32 +32,19 @@ export default function Home() {
   };
 
   useEffect(() => {
-        const checkSession = async () => {
-            try {
-                const response = await fetch(
-                    "http://localhost:8000/api/check-session.php",
-                    {
-                        credentials: "include",
-                    }
-                );
+    const check = async () => {
+        const loggedIn = await checkSession();
 
-                const result = await response.json();
+        if (!loggedIn) {
+            router.replace("/login");
+            return;
+        }
 
-                // console.log("Session:", result);
+        setCheckingSession(false);
+    };
 
-                if (!result.loggedIn) {
-                    router.push("/login");
-                    return;
-                }
-                // SESSION確認完了
-                setCheckingSession(false);
-            } catch (error) {
-                console.error("Session check error:", error);
-            }
-        };
-
-        checkSession();
-    }, [router]);
+    check();
+}, [router]);
 
     // SESSION確認中はTOPを表示しない
     if (checkingSession) {
