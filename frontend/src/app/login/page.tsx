@@ -27,6 +27,7 @@ export default function Login(){
         const check = async () => {
             const loggedIn = await checkSession();
 
+            // ログイン中にアクセスされたらHomeへ
             if (loggedIn) {
                 router.replace("/");
                 return;
