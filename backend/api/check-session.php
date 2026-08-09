@@ -1,7 +1,4 @@
 <?php
-
-session_start();
-
 header('Access-Control-Allow-Origin: http://localhost:3000');
 header('Access-Control-Allow-Credentials: true');
 header('Access-Control-Allow-Headers: Content-Type');
@@ -13,6 +10,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit;
 }
 
+session_start();
+error_log('CHECK SESSION ID: ' . ($_SESSION['id'] ?? 'なし'));
 if (isset($_SESSION['id'])) {
     echo json_encode([
         'loggedIn' => true,

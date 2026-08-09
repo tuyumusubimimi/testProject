@@ -44,6 +44,7 @@ require_once('../config/sqlForLogin.php');
 $sqlObj = new SqlForLogin($id, $password);
 if(!$sqlObj->canLogin()){exit;}
 $_SESSION['id'] = $id;
+error_log('LOGIN SESSION ID: ' . $_SESSION['id']);
 echo json_encode([
     'loggedIn' => true
 ]);

@@ -20,80 +20,41 @@ export default function Login(){
         formState:{errors, isValid},
     } = useForm<LoginFormData>();
 
-    
+    useEffect(() => {
+        const checkSession = async () => {
+            // console.log("SESSIONチェック開始");
 
-    // useEffect(() => {
-    //     console.log("useEffectが実行されました2");
+            try {
+                const response = await fetch(
+                    "http://localhost:8000/api/check-session.php",
+                    {
+                        credentials: "include",
+                    }
+                );
 
-    //     const checkSession = async () => {
-    //         console.log("checkSession開始");
+                // console.log("fetch完了");
+                // console.log("status:", response.status);
 
-    //         try {
-    //             const response = await fetch(
-    //                 "http://localhost:8000/api/check-session.php",
-    //                 {
-    //                     method: "GET",
-    //                     credentials: "include",
-    //                 }
-    //             );
+                const text = await response.text();
 
-    //             console.log("fetch完了");
-    //             console.log("status:", response.status);
+                // console.log("PHP response:", text);
 
-    //             const text = await response.text();
+                const result = JSON.parse(text);
 
-    //             console.log("PHP response:", text);
+                // console.log("result:", result);
 
-    //             const result = JSON.parse(text);
-
-    //             console.log("result:", result);
-
-    //             if (result.loggedIn) {
-    //                 console.log("ログイン済み → TOPへ");
-    //                 router.push("/");
-    //             }
-
-    //         } catch (error) {
-    //             console.error("Session check error:", error);
-    //         }
-    //     };
-
-    //     checkSession();
-    // }, [router]);
-
-    const checkSession = async () => {
-        console.log("checkSession開始");
-
-        try {
-            const response = await fetch(
-                "http://localhost:8000/api/check-session.php",
-                {
-                    method: "GET",
-                    credentials: "include",
+                if (result.loggedIn) {
+                    // console.log("ログイン済み → TOPへ");
+                    router.push("/");
                 }
-            );
 
-            console.log("fetch完了");
-            console.log("status:", response.status);
-
-            const text = await response.text();
-
-            console.log("PHP response:", text);
-
-            const result = JSON.parse(text);
-
-            console.log("result:", result);
-
-            if (result.loggedIn) {
-                console.log("ログイン済み → TOPへ");
-                router.push("/");
+            } catch (error) {
+                console.error("Session check error:", error);
             }
+        };
+        checkSession();
+    }, [router]);
 
-        } catch (error) {
-            console.error("Session check error:", error);
-        }
-    };
-    checkSession();
 
     // ログインボタンを押すとここが実行される
     const onSubmit = async(data: LoginFormData) => {
@@ -105,6 +66,14 @@ export default function Login(){
             credentials: "include",
             body: JSON.stringify(data),
         });
+        
+        // APIから結果を受信
+        const result = await response.json();
+
+        // ログイン処理が完了したらTop画面へ遷移
+        if (result.loggedIn) {
+            router.push("/");
+        }
     };
 
 
