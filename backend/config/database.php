@@ -1,23 +1,31 @@
 <?php
+class database{
+    protected PDO $pdo;
 
-$host = 'database';
-$dbname = 'myapp';
-$username = 'myapp';
-$password = 'mypassword';
+    function __construct(){
+        $this->db_connect();
+    }
 
-try {
-    $pdo = new PDO(
-        "mysql:host=$host;dbname=$dbname;charset=utf8mb4",
-        $username,
-        $password
-    );
+    private function db_connect(){
+        try {
+            $host = 'database';
+            $dbname = 'myapp';
+            $username = 'myapp';
+            $password = 'mypassword';
 
-    $pdo->setAttribute(
-        PDO::ATTR_ERRMODE,
-        PDO::ERRMODE_EXCEPTION
-    );
+            $this->pdo = new PDO(
+                "mysql:host=$host;dbname=$dbname;charset=utf8mb4",
+                $username,
+                $password
+            );
 
-} catch (PDOException $e) {
-    die('Database connection failed: ' . $e->getMessage());
+            $this->pdo->setAttribute(
+                PDO::ATTR_ERRMODE,
+                PDO::ERRMODE_EXCEPTION
+            );
+        } catch (PDOException $e) {
+            die('Database connection failed: ' . $e->getMessage());
+        }
+    }
 }
 ?>

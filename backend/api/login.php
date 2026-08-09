@@ -1,7 +1,8 @@
 <?php
+session_start();
 
-header('Content-Type: application/json; charset=utf-8');
 header('Access-Control-Allow-Origin: http://localhost:3000');
+header('Access-Control-Allow-Credentials: true');
 header('Access-Control-Allow-Headers: Content-Type');
 header('Access-Control-Allow-Methods: POST, OPTIONS');
 
@@ -37,11 +38,12 @@ if ($id === '' || $password === '') {
     exit;
 }
 
+// ここからログイン処理
+require_once('../config/sqlForLogin.php');
+
+$sqlObj = new SqlForLogin($id, $password);
+if(!$sqlObj->canLogin()){exit;}
+$_SESSION['id'] = $id;
 echo json_encode([
-    'success' => true,
-    'message' => 'データを受け取りました',
-    'data' => [
-        'id' => $id,
-        'password' => $password
-    ]
+    'loggedIn' => true
 ]);
