@@ -46,7 +46,7 @@ export default function Login(){
 
     // ログインボタンを押すとここが実行される
     const onSubmit = async(data: LoginFormData) => {
-        const response = await fetch("http://localhost:8000/api/login.php", {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/login.php`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -108,56 +108,3 @@ export default function Login(){
         </div>
     );
 };
-// "use client";
-
-// import { useEffect } from "react";
-
-// export default function Login() {
-//     console.log("Loginコンポーネントが実行されました");
-//     const router = useRouter();
-
-//     useEffect(() => {
-//     console.log("useEffectが実行されました");
-
-//     const checkSession = async () => {
-//         console.log("checkSession開始");
-
-//         try {
-//             const response = await fetch(
-//                 "http://localhost:8000/api/check-session.php",
-//                 {
-//                     method: "GET",
-//                     credentials: "include",
-//                 }
-//             );
-
-//             console.log("fetch完了");
-//             console.log("status:", response.status);
-
-//             const text = await response.text();
-
-//             console.log("PHP response:", text);
-
-//             const result = JSON.parse(text);
-
-//             console.log("result:", result);
-
-//             if (result.loggedIn) {
-//                 console.log("ログイン済み → TOPへ");
-//                 router.push("/");
-//             }
-
-//         } catch (error) {
-//             console.error("Session check error:", error);
-//         }
-//     };
-
-//     checkSession();
-// }, [router]);
-
-//     return (
-//         <div>
-//             <h1>ログイン画面</h1>
-//         </div>
-//     );
-// }
