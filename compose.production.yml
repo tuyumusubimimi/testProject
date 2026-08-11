@@ -8,8 +8,6 @@ frontend:
   container_name: my-project-frontend
   ports:
     - "3000:3000"
-  environment:
-    NEXT_PUBLIC_API_URL: ""
   depends_on:
     - backend
 
