@@ -1,7 +1,7 @@
 export async function checkSession(): Promise<boolean> {
     try {
         const response = await fetch(
-            "http://localhost:8000/api/check-session.php",
+            `${process.env.NEXT_PUBLIC_API_URL}/api/check-session.php`,
             {
                 credentials: "include",
             }

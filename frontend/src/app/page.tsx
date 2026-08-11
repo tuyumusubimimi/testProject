@@ -12,7 +12,7 @@ export default function Home() {
   // ログアウト処理
   const handleLogout = async() => {
     // logoutAPIへデータを送信
-    const response = await fetch("http://localhost:8000/api/logout.php", {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/logout.php`, {
       method: "POST",
       headers: {
           "Content-Type": "application/json",
