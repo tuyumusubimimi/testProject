@@ -1,7 +1,8 @@
 <?php
 session_start();
 
-header('Access-Control-Allow-Origin: http://localhost:3000');
+header('Content-Type: application/json; charset=utf-8');
+header('Access-Control-Allow-Origin: http://49.212.183.160');
 header('Access-Control-Allow-Credentials: true');
 header('Access-Control-Allow-Headers: Content-Type');
 header('Access-Control-Allow-Methods: POST, OPTIONS');
@@ -42,7 +43,16 @@ if ($id === '' || $password === '') {
 require_once('../config/sqlForLogin.php');
 
 $sqlObj = new SqlForLogin($id, $password);
-if(!$sqlObj->canLogin()){exit;}
+if (!$sqlObj->canLogin()) {
+    http_response_code(401);
+
+    echo json_encode([
+        'success' => false,
+        'message' => 'IDまたはパスワードが正しくありません'
+    ]);
+
+    exit;
+}
 $_SESSION['id'] = $id;
 error_log('LOGIN SESSION ID: ' . $_SESSION['id']);
 echo json_encode([
