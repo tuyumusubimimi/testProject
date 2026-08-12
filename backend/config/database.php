@@ -8,10 +8,10 @@ class database{
 
     private function db_connect(){
         try {
-            $host = 'database';
-            $dbname = 'myapp';
-            $username = 'myapp';
-            $password = 'mypassword';
+            $host = getenv('DB_HOST');
+            $dbname = getenv('DB_NAME');
+            $username = getenv('DB_USER');
+            $password = getenv('DB_PASSWORD');
 
             $this->pdo = new PDO(
                 "mysql:host=$host;dbname=$dbname;charset=utf8mb4",
