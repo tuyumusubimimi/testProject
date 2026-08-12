@@ -20,6 +20,8 @@ services:
       - "8000:80"
     env_file:
       - .env
+    environment:
+      APP_ORIGIN: ${APP_ORIGIN}
     depends_on:
       - database
 

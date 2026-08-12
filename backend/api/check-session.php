@@ -1,5 +1,5 @@
 <?php
-header('Access-Control-Allow-Origin: http://49.212.183.160');
+header('Access-Control-Allow-Origin: ' . getenv('APP_ORIGIN'));
 header('Access-Control-Allow-Credentials: true');
 header('Access-Control-Allow-Headers: Content-Type');
 header('Access-Control-Allow-Methods: GET, OPTIONS');
