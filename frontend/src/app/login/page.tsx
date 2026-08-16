@@ -4,6 +4,7 @@ import '../globals.css';
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from 'react';
 import { checkSession } from '../common';
+import ToggleButton from '@/components/toggleButton';
 
 // ログインフォームから送るデータのデータ型を定義
 type LoginFormData = {
@@ -12,17 +13,22 @@ type LoginFormData = {
 }
 
 export default function Login(){
+    // セッション確認中のフラグ
     const [checkingSession, setCheckingSession] = useState(true);
+    // ログインエラーメッセージ
+    const [loginErrorMessage, setLoginErrorMessage] = useState('');
+    // トグルボタンのオンオフ
+    const [isOn, setIsOn] = useState(false);
 
     const router = useRouter();
 
-    // react hook formの機能と実行タイミングを定義
     const {
         register,
         handleSubmit, 
-        formState:{errors, isValid},
+        formState:{errors},
     } = useForm<LoginFormData>();
 
+    // 変化があったら対応する
     useEffect(() => {
         const check = async () => {
             const loggedIn = await checkSession();
@@ -36,6 +42,7 @@ export default function Login(){
             setCheckingSession(false);
         };
 
+        // セッションチェックをする
         check();
     }, [router]);
 
@@ -60,9 +67,17 @@ export default function Login(){
 
         // ログイン処理が完了したらTop画面へ遷移
         if (result.loggedIn) {
+            setLoginErrorMessage('');
             router.push("/");
+        }else{
+            setLoginErrorMessage('IDかパスワードが間違っています。');
         }
     };
+
+    // トグルボタンが押されたらパスワード表示切り替え
+    const changePassword = (value: boolean) => {
+        setIsOn(value);
+    }
 
     return(
         <div>
@@ -80,11 +95,11 @@ export default function Login(){
                                 message: '20文字以内で入力してください。'
                             }
                         })}/>
+                        {errors.id && <div className='error'>{errors.id.message}</div>}
                     </div>
-                    {errors.id && <div className='error'>{errors.id.message}</div>}
                     <div>
                         <input 
-                        type='password'
+                        type={isOn ? 'text' : 'password'}
                         id='password'
                         {...register('password', {
                             required: 'パスワードは必須です。',
@@ -98,9 +113,11 @@ export default function Login(){
                             }
                         })}
                         />
+                        <ToggleButton onClick={changePassword}></ToggleButton>
+                        {errors.password && <div className='error'>{errors.password.message}</div>}
                     </div>
-                    {errors.password && <div className='error'>{errors.password.message}</div>}
                     <div>
+                        <div className='error'>{loginErrorMessage}</div>
                         <button type='submit' id='login-btn'>ログイン</button>
                     </div>
                 </form>
