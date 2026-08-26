@@ -3,9 +3,11 @@ import { useEffect, useState } from 'react';
 import './globals.css';
 import { useRouter } from "next/navigation";
 import { checkSession } from './common';
+import Image from 'next/image';
 
 export default function Home() {
   const [checkingSession, setCheckingSession] = useState(true);
+  const [images, setImages] = useState([]);
 
   const router = useRouter();
 
@@ -29,6 +31,21 @@ export default function Home() {
     if (!result.loggedIn) {
         router.push("/login");
     }
+  };
+
+  // The Cat APIから画像を取得する関数
+  const handleGame = async() => {
+    const response = await fetch('https://api.thecatapi.com/v1/images/search?limit=10', {
+      method: 'GET',
+      headers: {
+        "Content-Type": "application/json",
+        'x-api-key': `${process.env.MY_CAT_API_KEY}`,
+      }
+    });
+
+    const result = await response.json();
+    console.log('cat:', result);
+    setImages(result);
   };
 
   useEffect(() => {
@@ -56,6 +73,14 @@ export default function Home() {
       <div>Home</div>
       <div>
         <button onClick={handleLogout}>ログアウト</button>
+      </div>
+      <div>
+        <button onClick={handleGame}>猫画像</button>
+      </div>
+      <div>
+        {images.map((image, key) => (
+          <Image key={key} src={image['url']} alt='neko' width={100} height={100} />
+        ))}
       </div>
     </main>
   );
