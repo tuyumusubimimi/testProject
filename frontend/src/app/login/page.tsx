@@ -53,6 +53,11 @@ export default function Login(){
 
     // ログインボタンを押すとここが実行される
     const onSubmit = async(data: LoginFormData) => {
+        alert("onSubmitが実行されました");
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
+console.log("API URL:", apiUrl);
+console.log("Login URL:", `${apiUrl}/api/login.php`);
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/login.php`, {
             method: "POST",
             headers: {
@@ -82,8 +87,17 @@ export default function Login(){
     return(
         <div>
             <h1>ログイン画面</h1>
+            <p>画面更新テスト123</p>
             <div>
-                <form onSubmit={handleSubmit(onSubmit)}>
+            <p>画面更新テスト123</p>
+                <form onSubmit={handleSubmit((data) => {
+            alert("ログイン処理を開始します");
+            onSubmit(data);
+        },
+        (errors) => {
+            console.log("入力エラー:", errors);
+            alert("入力内容にエラーがあります");
+        })}>
                     <div>
                         <input 
                         type='text' 

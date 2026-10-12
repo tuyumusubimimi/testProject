@@ -12,9 +12,11 @@ services:
       - /app/.next
     environment:
       WATCHPACK_POLLING: "true"
+      NEXT_PUBLIC_API_URL: "http://localhost:8000"
     depends_on:
       - backend
     restart: unless-stopped
+    command: npm run dev -- --hostname 0.0.0.0
 
   backend:
     build:
