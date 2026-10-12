@@ -72,15 +72,19 @@ export default function Home() {
     <main>
       <div>Home</div>
       <div>
-        <button onClick={handleLogout}>ログアウト</button>
-      </div>
-      <div>
-        <button onClick={handleGame}>猫画像</button>
-      </div>
-      <div>
-        {images.map((image, key) => (
-          <Image key={key} src={image['url']} alt='neko' width={100} height={100} />
-        ))}
+        <div>
+          <button onClick={handleLogout}>ログアウト</button>
+        </div>
+        <div>
+          <div>
+            <button onClick={handleGame}>猫画像</button>
+          </div>
+          <div>
+            {images.map((image, key) => (
+              <Image key={key} src={image['url']} alt='neko' width={100} height={100} />
+            ))}
+          </div>
+        </div>
       </div>
     </main>
   );
